@@ -1,3 +1,4 @@
+import express from 'express';
 import axios from 'axios';
 import FormData from 'form-data';
 import config from '../config/index.js';
@@ -71,7 +72,6 @@ const createImage = ({
   quality = config.OPENAI_IMAGE_GENERATION_QUALITY,
   n = 1,
 }) => {
-  // set image size to 1024 when using the DALL-E 3 model and the requested size is 256 or 512.
   if (model === MODEL_DALL_E_3 && [IMAGE_SIZE_256, IMAGE_SIZE_512].includes(size)) {
     size = IMAGE_SIZE_1024;
   }
@@ -102,13 +102,13 @@ const createAudioTranscriptions = ({
 const handleLineMessage = async (lineMessage) => {
   const { text } = lineMessage;
 
-  // Filter messages that start with "al,"
-  if (!text.startsWith("Ai ")) {
+  // Filter messages that start with "Ai "
+  if (!text || !text.startsWith("Ai ")) {
     console.log("Message ignored: does not start with 'Ai '");
     return { reply: "Message ignored. Start your message with 'Ai ' to chat with me." };
   }
 
-  // Remove the prefix "al," from the message
+  // Extract the message content after "Ai "
   const prompt = text.slice(3).trim();
 
   try {
@@ -116,12 +116,62 @@ const handleLineMessage = async (lineMessage) => {
       messages: [{ role: ROLE_HUMAN, content: prompt }],
     });
 
+    // Return the AI's reply
     return { reply: response.data.choices[0].message.content };
   } catch (err) {
     console.error("Error processing message:", err.message);
     return { reply: "Sorry, something went wrong." };
   }
 };
+
+// Express Webhook Integration
+const app = express();
+app.use(express.json());
+
+app.post('/webhook', async (req, res) => {
+  const events = req.body.events;
+
+  // Process each incoming event
+  const responses = await Promise.all(
+    events.map(async (event) => {
+      if (event.type === 'message' && event.message.type === 'text') {
+        const lineMessage = { text: event.message.text };
+
+        // Use handleLineMessage to process the message
+        const { reply } = await handleLineMessage(lineMessage);
+
+        return {
+          replyToken: event.replyToken,
+          message: reply,
+        };
+      }
+
+      return null; // Ignore non-text or non-message events
+    })
+  );
+
+  // Reply to LINE with the processed messages
+  responses.forEach(async ({ replyToken, message }) => {
+    if (replyToken && message) {
+      await axios.post(
+        'https://api.line.me/v2/bot/message/reply',
+        {
+          replyToken,
+          messages: [{ type: 'text', text: message }],
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${config.LINE_CHANNEL_ACCESS_TOKEN}`,
+          },
+        }
+      );
+    }
+  });
+
+  res.status(200).end();
+});
+
+app.listen(3000, () => console.log('Server running on port 3000'));
 
 export {
   createAudioTranscriptions,
