@@ -98,8 +98,34 @@ const createAudioTranscriptions = ({
   });
 };
 
+// Function to handle incoming LINE messages
+const handleLineMessage = async (lineMessage) => {
+  const { text } = lineMessage;
+
+  // Filter messages that start with "al,"
+  if (!text.startsWith("Ai ")) {
+    console.log("Message ignored: does not start with 'Ai '");
+    return { reply: "Message ignored. Start your message with 'Ai ' to chat with me." };
+  }
+
+  // Remove the prefix "al," from the message
+  const prompt = text.slice(3).trim();
+
+  try {
+    const response = await createChatCompletion({
+      messages: [{ role: ROLE_HUMAN, content: prompt }],
+    });
+
+    return { reply: response.data.choices[0].message.content };
+  } catch (err) {
+    console.error("Error processing message:", err.message);
+    return { reply: "Sorry, something went wrong." };
+  }
+};
+
 export {
   createAudioTranscriptions,
   createChatCompletion,
   createImage,
+  handleLineMessage, // Export this function for use in your LINE webhook
 };
