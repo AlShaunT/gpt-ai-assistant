@@ -41,21 +41,17 @@ client.interceptors.response.use(handleFulfilled, (err) => {
   return handleRejected(err);
 });
 
-const reply = ({
-  replyToken,
-  messages,
-}) => client.post('/v2/bot/message/reply', {
-  replyToken,
-  messages,
-});
+const reply = ({ replyToken, messages }) =>
+  client.post('/v2/bot/message/reply', {
+    replyToken,
+    messages,
+  });
 
-const fetchGroupSummary = ({
-  groupId,
-}) => client.get(`/v2/bot/group/${groupId}/summary`);
+const fetchGroupSummary = ({ groupId }) =>
+  client.get(`/v2/bot/group/${groupId}/summary`);
 
-const fetchProfile = ({
-  userId,
-}) => client.get(`/v2/bot/profile/${userId}`);
+const fetchProfile = ({ userId }) =>
+  client.get(`/v2/bot/profile/${userId}`);
 
 const dataClient = axios.create({
   baseURL: 'https://api-data.line.me',
@@ -77,34 +73,39 @@ dataClient.interceptors.response.use(handleFulfilled, (err) => {
   return handleRejected(err);
 });
 
-const fetchContent = ({
-  messageId,
-}) => dataClient.get(`/v2/bot/message/${messageId}/content`, {
-  responseType: 'arraybuffer',
-});
+const fetchContent = ({ messageId }) =>
+  dataClient.get(`/v2/bot/message/${messageId}/content`, {
+    responseType: 'arraybuffer',
+  });
 
-// Process incoming messages
+// Add processMessage function here
 const processMessage = async ({ message, replyToken }) => {
-  // Ignore messages that don't start with "Ai "
-  if (message.type !== MESSAGE_TYPE_TEXT || !message.text.startsWith("Ai ")) {
-    return; // Do nothing
+  console.log('Received message:', JSON.stringify(message));
+  if (message.type !== MESSAGE_TYPE_TEXT || !message.text.startsWith('Ai ')) {
+    console.log('Ignored: Does not start with "Ai "');
+    return;
   }
+  console.log('Processing message:', message.text);
+  // Continue with OpenAI processing...
+  const aiResponse = await createChatCompletion({
+    messages: [{ role: ROLE_HUMAN, content: message.text.slice(3) }],
+  });
+  await reply({
+    replyToken,
+    messages: [{ type: MESSAGE_TYPE_TEXT, text: aiResponse.data.choices[0].message.content }],
+  });
+};
 
-  // Process messages starting with "Ai "
+const handleWebhookEvent = async (event) => {
   try {
-    const aiResponse = await createChatCompletion({
-      messages: [{ role: ROLE_HUMAN, content: message.text.slice(3) }],
-    });
-    await reply({
-      replyToken,
-      messages: [{ type: MESSAGE_TYPE_TEXT, text: aiResponse.data.choices[0].message.content }],
-    });
-  } catch (error) {
-    console.error('Error processing AI response:', error);
-    await reply({
-      replyToken,
-      messages: [{ type: MESSAGE_TYPE_TEXT, text: 'Sorry, I encountered an error processing your request.' }],
-    });
+    if (event.type === EVENT_TYPE_MESSAGE) {
+      await processMessage({
+        message: event.message,
+        replyToken: event.replyToken,
+      });
+    }
+  } catch (err) {
+    console.error('Error handling event:', err);
   }
 };
 
@@ -114,4 +115,5 @@ export {
   fetchProfile,
   fetchContent,
   processMessage,
+  handleWebhookEvent, // Make sure to export this
 };
