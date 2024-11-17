@@ -83,9 +83,27 @@ const fetchContent = ({
   responseType: 'arraybuffer',
 });
 
+const processMessage = async ({ message, replyToken }) => {
+  if (message.type === MESSAGE_TYPE_TEXT && message.text.startsWith("Ai ")) {
+    const aiResponse = await createChatCompletion({
+      messages: [{ role: ROLE_HUMAN, content: message.text.slice(3) }],
+    });
+    await reply({
+      replyToken,
+      messages: [{ type: MESSAGE_TYPE_TEXT, text: aiResponse.data.choices[0].message.content }],
+    });
+  } else {
+    await reply({
+      replyToken,
+      messages: [{ type: MESSAGE_TYPE_TEXT, text: 'I only respond to messages starting with "Ai "' }],
+    });
+  }
+};
+
 export {
   reply,
   fetchGroupSummary,
   fetchProfile,
   fetchContent,
+  processMessage,
 };
