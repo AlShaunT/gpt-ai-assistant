@@ -83,8 +83,15 @@ const fetchContent = ({
   responseType: 'arraybuffer',
 });
 
+// Process incoming messages
 const processMessage = async ({ message, replyToken }) => {
-  if (message.type === MESSAGE_TYPE_TEXT && message.text.startsWith("Ai ")) {
+  // Ignore messages that don't start with "Ai "
+  if (message.type !== MESSAGE_TYPE_TEXT || !message.text.startsWith("Ai ")) {
+    return; // Do nothing
+  }
+
+  // Process messages starting with "Ai "
+  try {
     const aiResponse = await createChatCompletion({
       messages: [{ role: ROLE_HUMAN, content: message.text.slice(3) }],
     });
@@ -92,10 +99,11 @@ const processMessage = async ({ message, replyToken }) => {
       replyToken,
       messages: [{ type: MESSAGE_TYPE_TEXT, text: aiResponse.data.choices[0].message.content }],
     });
-  } else {
+  } catch (error) {
+    console.error('Error processing AI response:', error);
     await reply({
       replyToken,
-      messages: [{ type: MESSAGE_TYPE_TEXT, text: 'I only respond to messages starting with "Ai "' }],
+      messages: [{ type: MESSAGE_TYPE_TEXT, text: 'Sorry, I encountered an error processing your request.' }],
     });
   }
 };
