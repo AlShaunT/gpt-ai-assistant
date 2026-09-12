@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Arcadia Home Watch</title>
+  <meta name="description" content="Arcadia Unified School District home watch shortlist" />
+  <style>
+    :root{--bg:#f6f7fb;--card:#fff;--text:#111827;--muted:#6b7280;--line:#e5e7eb;--accent:#111827;--good:#166534;--goodbg:#dcfce7;--warn:#9a3412;--warnbg:#ffedd5;--blue:#1d4ed8;--bluebg:#dbeafe}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+    .wrap{max-width:980px;margin:0 auto;padding:24px 16px 64px}.hero{background:linear-gradient(135deg,#111827,#374151);color:#fff;border-radius:22px;padding:26px;box-shadow:0 12px 32px rgba(17,24,39,.16)}
+    h1{margin:0 0 8px;font-size:31px;letter-spacing:-.7px}.sub{opacity:.82;font-size:15px;line-height:1.5}.topstats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px}.stat{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:12px}.stat strong{display:block;font-size:21px}.stat span{font-size:12px;opacity:.78}
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0 14px}.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 13px;font-size:13px;cursor:pointer}.chip.active{background:#111827;color:#fff;border-color:#111827}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 5px 16px rgba(17,24,39,.045)}
+    .cardhead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.addr{font-weight:760;font-size:18px;line-height:1.28}.price{font-weight:800;font-size:21px;margin-top:10px}.badge{font-size:11px;font-weight:700;border-radius:999px;padding:6px 9px;white-space:nowrap}.activeb{color:var(--good);background:var(--goodbg)}.coming{color:var(--blue);background:var(--bluebg)}
+    .specs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}.spec{background:#f9fafb;border-radius:11px;padding:9px;text-align:center}.spec b{display:block;font-size:14px}.spec small{color:var(--muted);font-size:11px}
+    .meta{border-top:1px solid var(--line);padding-top:12px;font-size:13px;line-height:1.65}.meta span{color:var(--muted)}.event{margin-top:12px;border-left:3px solid #111827;padding:8px 10px;background:#f9fafb;border-radius:0 10px 10px 0;font-size:12px;line-height:1.5}.links{display:flex;gap:8px;margin-top:14px}.links a{flex:1;text-align:center;text-decoration:none;border-radius:11px;padding:10px 12px;font-size:13px;font-weight:700}.primary{background:#111827;color:#fff}.secondary{border:1px solid var(--line);color:#111827;background:#fff}
+    details{margin-top:22px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px}summary{font-weight:750;cursor:pointer}.criteria{display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;margin-top:14px;font-size:13px;line-height:1.55}.foot{color:var(--muted);font-size:11px;line-height:1.5;margin-top:18px;text-align:center}
+    .hidden{display:none!important}
+    @media(max-width:720px){.grid{grid-template-columns:1fr}.topstats{grid-template-columns:1fr 1fr 1fr}.hero{padding:22px}.addr{font-size:17px}.criteria{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <h1>Arcadia Home Watch</h1>
+    <div class="sub">符合你目前購屋條件、以及已觸發過監控事件的物件。這個頁面是你的 shortlist，不是 MLS；價格與狀態以最新 listing 為準。</div>
+    <div class="topstats">
+      <div class="stat"><strong>5</strong><span>目前收集物件</span></div>
+      <div class="stat"><strong>$1.24M</strong><span>已知價格中位數</span></div>
+      <div class="stat"><strong>≤ $508</strong><span>HOA 上限 / 月</span></div>
+    </div>
+  </section>
+
+  <div class="toolbar">
+    <button class="chip active" data-filter="all">全部</button>
+    <button class="chip" data-filter="active">Active</button>
+    <button class="chip" data-filter="coming">Coming Soon</button>
+    <button class="chip" id="sortPrice">價格由低到高</button>
+  </div>
+
+  <main class="grid" id="grid">
+    <article class="card" data-status="coming" data-price="1150000">
+      <div class="cardhead"><div class="addr">156 El Dorado St #C<br>Arcadia, CA 91006</div><span class="badge coming">COMING SOON</span></div>
+      <div class="price">$1,150,000</div>
+      <div class="specs"><div class="spec"><b>3 / 2.5</b><small>bed / bath</small></div><div class="spec"><b>2,030</b><small>sqft</small></div><div class="spec"><b>2010</b><small>year built</small></div></div>
+      <div class="meta"><b>HOA：</b>$200/月<br><b>Garage：</b>2-car attached<br><b>學區：</b>Arcadia Unified<br><b>Pool：</b>無 private pool<br><b>屋況：</b>Move-in ready<br><b>Busy road：</b>通過目前篩選<br><span>Mello-Roos：若查到僅供資訊，不作排除</span></div>
+      <div class="event"><b>新事件：</b>2026-09-10 以 Coming Soon 出現；當時預計 9/23 轉 Active。僅轉 Active 不會再次提醒。</div>
+      <div class="links"><a class="primary" href="https://www.zillow.com/homedetails/156-El-Dorado-St-C-Arcadia-CA-91006/94643621_zpid/" target="_blank" rel="noopener">看房源</a><a class="secondary" href="https://www.google.com/maps/search/?api=1&query=156%20El%20Dorado%20St%20C%20Arcadia%20CA%2091006" target="_blank" rel="noopener">地圖</a></div>
+    </article>
+
+    <article class="card" data-status="active" data-price="1198000">
+      <div class="cardhead"><div class="addr">656 W Huntington Dr #O-1<br>Arcadia, CA 91007</div><span class="badge activeb">ACTIVE</span></div>
+      <div class="price">$1,198,000</div>
+      <div class="specs"><div class="spec"><b>3 / 3</b><small>bed / bath</small></div><div class="spec"><b>1,770</b><small>sqft</small></div><div class="spec"><b>2013</b><small>year built</small></div></div>
+      <div class="meta"><b>HOA：</b>$385/月<br><b>Garage：</b>2-car attached<br><b>學區：</b>Arcadia Unified<br><b>Pool：</b>無 private pool<br><b>社區：</b>Gated community<br><b>Busy road：</b>單位位於社區內部，已接受<br><span>Mello-Roos：不作排除條件</span></div>
+      <div class="event"><b>已處理：</b>2026-08-25 降價 $40,000 至 $1,198,000（MLS WS26139238）。</div>
+      <div class="links"><a class="primary" href="https://www.zillow.com/homedetails/656-W-Huntington-Dr-O-1-Arcadia-CA-91007/121232223_zpid/" target="_blank" rel="noopener">看房源</a><a class="secondary" href="https://www.google.com/maps/search/?api=1&query=656%20W%20Huntington%20Dr%20O-1%20Arcadia%20CA%2091007" target="_blank" rel="noopener">地圖</a></div>
+    </article>
+
+    <article class="card" data-status="active" data-price="1250000">
+      <div class="cardhead"><div class="addr">127 S 3rd Ave #A<br>Arcadia, CA 91006</div><span class="badge activeb">ACTIVE</span></div>
+      <div class="price">$1,250,000</div>
+      <div class="specs"><div class="spec"><b>3 / 2.5</b><small>bed / bath</small></div><div class="spec"><b>2,350</b><small>sqft</small></div><div class="spec"><b>2005</b><small>year built</small></div></div>
+      <div class="meta"><b>HOA：</b>$120/月<br><b>Garage：</b>2-car attached<br><b>學區：</b>Arcadia Unified<br><b>Pool：</b>無 private pool<br><b>屋況：</b>Turnkey<br><b>Busy road：</b>3rd Ave 住宅區，通過目前篩選<br><span>Mello-Roos：不作排除條件</span></div>
+      <div class="event"><b>已處理：</b>8/29 降至 $1,279,800；9/7 再降至 $1,250,000，並完成 relist（MLS CV26140947）。</div>
+      <div class="links"><a class="primary" href="https://www.zillow.com/homedetails/127-S-3rd-Ave-A-Arcadia-CA-91006/243990715_zpid/" target="_blank" rel="noopener">看房源</a><a class="secondary" href="https://www.google.com/maps/search/?api=1&query=127%20S%203rd%20Ave%20A%20Arcadia%20CA%2091006" target="_blank" rel="noopener">地圖</a></div>
+    </article>
+
+    <article class="card" data-status="active" data-price="1268000">
+      <div class="cardhead"><div class="addr">1013 Holly Ave #A<br>Arcadia, CA 91007</div><span class="badge activeb">ACTIVE · LAST KNOWN</span></div>
+      <div class="price">$1,268,000</div>
+      <div class="specs"><div class="spec"><b>4 / 3</b><small>bed / bath</small></div><div class="spec"><b>1,840</b><small>sqft</small></div><div class="spec"><b>2019</b><small>year built</small></div></div>
+      <div class="meta"><b>HOA：</b>$440/月<br><b>Garage：</b>2-car attached<br><b>學區：</b>Arcadia Unified<br><b>Pool：</b>無 private pool<br><b>屋況：</b>Turnkey<br><b>Flipper：</b>公開紀錄未呈現近期快速翻轉<br><span>目前 listing 狀態請以房源頁最新資訊為準</span></div>
+      <div class="event"><b>已處理：</b>2026-09-09 降價 $82,000 至 $1,268,000（MLS TR26170215）。</div>
+      <div class="links"><a class="primary" href="https://www.zillow.com/homedetails/1013-Holly-Ave-A-Arcadia-CA-91007/302798241_zpid/" target="_blank" rel="noopener">看房源</a><a class="secondary" href="https://www.google.com/maps/search/?api=1&query=1013%20Holly%20Ave%20A%20Arcadia%20CA%2091007" target="_blank" rel="noopener">地圖</a></div>
+    </article>
+
+    <article class="card" data-status="active" data-price="1338000">
+      <div class="cardhead"><div class="addr">656 W Huntington Dr #K-1<br>Arcadia, CA 91007</div><span class="badge activeb">ACTIVE</span></div>
+      <div class="price">$1,338,000</div>
+      <div class="specs"><div class="spec"><b>4 / 3.5</b><small>bed / bath</small></div><div class="spec"><b>2,094</b><small>sqft</small></div><div class="spec"><b>2014</b><small>year built</small></div></div>
+      <div class="meta"><b>HOA：</b>$385/月<br><b>Garage：</b>2-car attached<br><b>學區：</b>Arcadia Unified<br><b>Pool：</b>無 private pool<br><b>社區：</b>Arbor Rose gated community<br><b>Busy road：</b>社區內部單位，已列入監控<br><span>Mello-Roos：不作排除條件</span></div>
+      <div class="event"><b>監控基線：</b>2026-07-06 已上市，因此不是新房源；之後若降價、back on market 或 pending→active 才通知。</div>
+      <div class="links"><a class="primary" href="https://www.zillow.com/homedetails/656-W-Huntington-Dr-K-1-Arcadia-CA-91007/121652976_zpid/" target="_blank" rel="noopener">看房源</a><a class="secondary" href="https://www.google.com/maps/search/?api=1&query=656%20W%20Huntington%20Dr%20K-1%20Arcadia%20CA%2091007" target="_blank" rel="noopener">地圖</a></div>
+    </article>
+  </main>
+
+  <details>
+    <summary>目前監控條件</summary>
+    <div class="criteria">
+      <div>✓ Arcadia Unified School District</div><div>✓ 價格 ≤ $1.5M</div>
+      <div>✓ SFH / townhouse（含 townhouse-style condo）</div><div>✓ 至少 3 bed / 2 bath</div>
+      <div>✓ 至少 1,600 sqft</div><div>✓ 2005 年或之後</div>
+      <div>✓ HOA ≤ $508/月</div><div>✓ 至少 2-car garage</div>
+      <div>✓ 不要 private pool；community pool 可以</div><div>✓ Mello-Roos 可以</div>
+      <div>✓ 排除直接面 busy road</div><div>✓ 排除 flipper / fixer-upper / 明顯需裝修</div>
+      <div>✓ 監控新房源、price cut</div><div>✓ 監控 back on market、pending→active</div>
+    </div>
+  </details>
+
+  <div class="foot">最後整理：2026-09-11 · 房源資訊可能延遲或變更；下 offer 前請以 MLS、seller disclosures、HOA 文件與實地查驗為準。</div>
+</div>
+<script>
+  const chips=[...document.querySelectorAll('.chip[data-filter]')], grid=document.getElementById('grid');
+  chips.forEach(c=>c.addEventListener('click',()=>{chips.forEach(x=>x.classList.remove('active'));c.classList.add('active');const f=c.dataset.filter;[...grid.children].forEach(card=>card.classList.toggle('hidden',f!=='all'&&card.dataset.status!==f));}));
+  document.getElementById('sortPrice').addEventListener('click',()=>{[...grid.children].sort((a,b)=>Number(a.dataset.price)-Number(b.dataset.price)).forEach(x=>grid.appendChild(x));});
+</script>
+</body>
+</html>
